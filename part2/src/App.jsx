@@ -47,7 +47,12 @@ const App = () => {
     }
   ]
 
-  return <Course course={courses} />
+  return (
+    <>
+      <h1>Web Development curriculum</h1>
+      <Course course={courses} />
+    </>
+  )
 }
 
 export default App
