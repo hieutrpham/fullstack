@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
-import axios from 'axios'
+import service from './services/service'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -12,9 +12,14 @@ const App = () => {
   const [filterName, setFilterName] = useState('')
 
   useEffect(() => {
-    axios.get('http://localhost:3001/persons')
-      .then(response => {setPersons(response.data)})
-    }, [])
+      service.getAll()
+        .then(initPerson => setPersons(initPerson))      
+      console.log('render')
+    },[])
+
+  useEffect(() => {
+    console.log('persons state changed:', persons)
+    }, [persons])
 
   const addPerson = (event) => {
     event.preventDefault()
@@ -23,11 +28,27 @@ const App = () => {
       number: newNumber
     }
 
-    if (persons.map(person => person.name.toLowerCase()).includes(newName.toLowerCase())) {
-      alert(`${newName} is already added to the phonebook`)
-    }
+    if (persons.map(person => person.name.toLowerCase())
+      .includes(newName.toLowerCase())) {
+        if (window.confirm(`${newName} is already added to the phonebook, 
+          replace the old number with a new one?`)) {
+            const newData = {
+              name: newName,
+              number: newNumber
+            }
+
+            const newId = persons.find(n => n.name === newName).id
+
+            service.update(newId, newData)
+              .then(res => setPersons(persons.map(p => p.id===newId ? res : p)))
+          }
+      }
     else {
-      setPersons(persons.concat(newPerson))
+      service.create(newPerson)
+        .then(returnedPerson => {setPersons(persons.concat(returnedPerson))})
+      
+      console.log('state changed when adding new person')
+      
       setNewName('')
       setNewNumber('')
     }
@@ -55,6 +76,16 @@ const App = () => {
     }    
   }
 
+  const handleDelete = (id) => {
+    if (window.confirm('do you wanna delete')) {
+    service.remove(id)
+    .then(() => {
+      setPersons(persons.filter(person => person.id !== id))
+    })
+    .catch(() => alert('error deleting'))
+  }
+  }
+
   return (
     <div>
       <h2>Phonebook</h2>
@@ -69,7 +100,7 @@ const App = () => {
 
       <h2>Numbers</h2>
 
-      <Persons personToShow={personToShow}/>
+      <Persons personToShow={personToShow} onDelete={handleDelete}/>
 
     </div>
   )

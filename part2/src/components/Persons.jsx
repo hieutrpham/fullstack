@@ -1,10 +1,19 @@
-const Persons = ({personToShow}) => {
+import service from '../services/service'
+
+const Persons = ({personToShow, onDelete}) => {
     return (
-        <>
-            <ul>
-            {personToShow.map(person => <li key={person.id}>{person.name}: {person.number}</li>)}
-            </ul>
-        </>
+        <ul>
+            {personToShow.map(person => {
+                return (
+                    <li key={person.id}>
+                        {person.name}: {person.number}
+                        <button key={person.id} onClick={() => onDelete(person.id)}>
+                            delete</button>
+                    </li>
+
+                )}
+            )}
+        </ul>
     )
 }
 
