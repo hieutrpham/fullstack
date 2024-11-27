@@ -3,6 +3,7 @@ import Filter from './components/Filter'
 import PersonForm from './components/PersonForm'
 import Persons from './components/Persons'
 import service from './services/service'
+import {Notification, Error} from './components/Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -10,6 +11,8 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [showAll, setShowAll] = useState(true)
   const [filterName, setFilterName] = useState('')
+  const [noti, setNoti] = useState('')
+  const [err, setErr] = useState('')
 
   useEffect(() => {
       service.getAll()
@@ -28,6 +31,7 @@ const App = () => {
       number: newNumber
     }
 
+    // check if person exists and replace phone number
     if (persons.map(person => person.name.toLowerCase())
       .includes(newName.toLowerCase())) {
         if (window.confirm(`${newName} is already added to the phonebook, 
@@ -41,14 +45,25 @@ const App = () => {
 
             service.update(newId, newData)
               .then(res => setPersons(persons.map(p => p.id===newId ? res : p)))
+              .then(() => {
+                setNoti(`phone number of ${newName} successfuly updated`)
+                setTimeout(() => {
+                  setNoti(null)
+                }, 3000);
+              })
           }
       }
+    
+    // if not create new record
     else {
       service.create(newPerson)
         .then(returnedPerson => {setPersons(persons.concat(returnedPerson))})
-      
-      console.log('state changed when adding new person')
-      
+        .then(() => {
+          setNoti(`${newPerson.name} successfully added`)
+          setTimeout(() => {
+            setNoti(null)
+          }, 3000);
+        })
       setNewName('')
       setNewNumber('')
     }
@@ -81,14 +96,20 @@ const App = () => {
     service.remove(id)
     .then(() => {
       setPersons(persons.filter(person => person.id !== id))
+      setNoti('deleted successfully')
     })
-    .catch(() => alert('error deleting'))
-  }
+    .catch(() => {
+      setErr(`information of ${persons.find(id => id===id).name} has already been removed from server`)
+    }
+  )}
   }
 
   return (
     <div>
       <h2>Phonebook</h2>
+
+      <Notification message={noti}/>
+      <Error message={err}/>
       
       <Filter filterValue={filterName} onChange={handleFilter} onKeyDown={handleKeyDown}/>
 
