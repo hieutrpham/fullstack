@@ -1,5 +1,3 @@
-import service from '../services/service'
-
 const Persons = ({personToShow, onDelete}) => {
     return (
         <ul>
