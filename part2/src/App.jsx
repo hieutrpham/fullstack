@@ -44,9 +44,7 @@ const App = () => {
       })
   }, [])
 
-  if (!notes) {
-    return null
-  }
+  if (!notes) {return null}
 
   const addNote = (event) => {
     event.preventDefault()
