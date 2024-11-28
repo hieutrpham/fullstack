@@ -7,13 +7,21 @@ const App = () => {
 
   const [newCountry, setNewCountry] = useState('enter a country name')
 
+  // console.log('1st render', Object.entries(countries))
+
   useEffect(() => {    
     api.getAll().then(result => {setCountries(result)})
     .catch(err => {console.log(err)
     })
+
+    // console.log('api call')
+    
   }, [])
 
-  console.log(countries.languages)
+  console.log(countries)
+  
+
+  // console.log('2nd render: country length', Object.entries(countries).length)
   
   // const handleCountryChange = event => {setNewCountry(event.target.value)} 
 
@@ -23,7 +31,7 @@ const App = () => {
         {/* <input value = {newCountry} onChange={handleCountryChange}/> */}
       </form> 
 
-      {/* <Country country={countries}/> */}
+      <Country country={countries}/>
     </>
   )
 }
