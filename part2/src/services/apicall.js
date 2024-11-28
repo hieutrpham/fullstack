@@ -1,10 +1,10 @@
 import axios from 'axios'
-const baseUrl = 'https://studies.cs.helsinki.fi/restcountries/api/all'
+const baseUrl = 'https://studies.cs.helsinki.fi/restcountries/api/name'
 
 const countryUrl = 'https://studies.cs.helsinki.fi/restcountries/api/name/finland'
 
-const getAll = () => {
-  const r = axios.get(countryUrl)
+const getCountry = (countryName) => {
+  const r = axios.get(`${baseUrl}/${countryName}`)
   return r.then(res => res.data)
 }
 
@@ -18,4 +18,4 @@ const update = (id, newObject) => {
   return request.then(response => response.data)
 }
 
-export default { getAll, create, update }
+export default { getCountry, create, update }
