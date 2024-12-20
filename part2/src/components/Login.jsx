@@ -9,12 +9,12 @@ const Login = ({
         <form onSubmit={handleLogin}>
             <div>
                 username:
-                    <input value={username} onChange={userChange}/>
+                    <input data-testid='username' value={username} onChange={userChange}/>
             </div>
 
             <div>
                 password:
-                    <input type="password" value={password} onChange={pwChange}/> 
+                    <input data-testid='password' type="password" value={password} onChange={pwChange}/> 
             </div>
             <button type="submit">login</button>
         </form>
