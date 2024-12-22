@@ -26,17 +26,30 @@ export const vote = (id) => {
   }  
 }
 
+export const addAnecdoteAction = (content) => {
+  return {
+    type: 'ADD',
+    content: content,
+    votes: 0
+  }
+}
+
 const reducer = (state = initialState, action) => {
   switch(action.type) {
-    case 'VOTE':
-      console.log(state)
-      
+    case 'VOTE':    
       return state.map(state => {
         if (state.id === action.id) {        
           state.votes ++
           return state
         } else return state
       })
+    case 'ADD':    
+      const newAnecdote = {
+        content: action.content,
+        id: getId(),
+        votes: 0
+      }
+      return [...state, newAnecdote]
   }
   return state
 }
