@@ -1,11 +1,13 @@
-import NewNote from './components/NewNote'
-import Notes from './components/Notes'
+import Notes from "./components/Notes"
+import NewNote from "./components/NewNote"
+import VisibilityFilter from './components/VisibilityFilter'
 
 const App = () => {
-  return (
+  return(
     <div>
       <NewNote />
-      <Notes  />
+      <VisibilityFilter />
+      <Notes />
     </div>
   )
 }
