@@ -1,3 +1,5 @@
+import { createSlice, current } from "@reduxjs/toolkit"
+
 const anecdotesAtStart = [
   'If it hurts, do it more often',
   'Adding manpower to a late software project makes it later!',
@@ -19,39 +21,73 @@ const asObject = (anecdote) => {
 
 const initialState = anecdotesAtStart.map(asObject)
 
-export const vote = (id) => {
-  return {
-    type: 'VOTE',
-    id: id
-  }  
-}
+const anecdoteSlice = createSlice({
+  name: 'anecdotes',
+  initialState,
+  reducers: {
+    vote(state, action) {
+      // console.log('vote', action)
+      // console.log('state', current(state))
 
-export const addAnecdoteAction = (content) => {
-  return {
-    type: 'ADD',
-    content: content,
-    votes: 0
-  }
-}
-
-const anecdoteReducer = (state = initialState, action) => {
-  switch(action.type) {
-    case 'VOTE':    
-      return state.map(state => {
-        if (state.id === action.id) {        
-          state.votes ++
-          return state
-        } else return state
+      // state.forEach(item => {
+      //   if (item.id === action.payload) {
+      //     item.votes++
+      //   }
+      // })
+      state.map(item => {
+        item.id === action.payload 
+        ? {...item, votes: item.votes++}
+        : item
       })
-    case 'ADD':    
+    },
+
+    addAnecdoteAction(state, action) {
+      console.log(current(state), 'action', action)
+
       const newAnecdote = {
-        content: action.content,
+        content: action.payload,
         id: getId(),
         votes: 0
       }
       return [...state, newAnecdote]
+    }
   }
-  return state
-}
+})
 
-export default anecdoteReducer
+// export const vote = (id) => {
+//   return {
+//     type: 'VOTE',
+//     id: id
+//   }  
+// }
+
+// export const addAnecdoteAction = (content) => {
+//   return {
+//     type: 'ADD',
+//     content: content,
+//     votes: 0
+//   }
+// }
+
+// const anecdoteReducer = (state = initialState, action) => {
+//   switch(action.type) {
+//     case 'VOTE':    
+//       return state.map(state => {
+//         if (state.id === action.id) {        
+//           state.votes ++
+//           return state
+//         } else return state
+//       })
+//     case 'ADD':    
+//       const newAnecdote = {
+//         content: action.content,
+//         id: getId(),
+//         votes: 0
+//       }
+//       return [...state, newAnecdote]
+//   }
+//   return state
+// }
+
+export default anecdoteSlice.reducer
+export const { vote, addAnecdoteAction } = anecdoteSlice.actions
