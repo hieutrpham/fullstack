@@ -34,6 +34,8 @@ const anecdoteSlice = createSlice({
       //     item.votes++
       //   }
       // })
+      // console.log(action.payload)
+      
       state.map(item => {
         item.id === action.payload 
         ? {...item, votes: item.votes++}
