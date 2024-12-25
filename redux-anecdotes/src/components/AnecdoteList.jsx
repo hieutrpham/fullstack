@@ -13,10 +13,11 @@ const AnecdoteList = () => {
     return anecdotes
   })
 
-  // console.log(anecdotes)
-  
+  console.log(anecdotes)
 
   const sortedAnecdotes = [...anecdotes].sort((a, b) => b.votes - a.votes)
+  console.log('sorted', sortedAnecdotes)
+    
   const dispatch = useDispatch()
 
   return (
@@ -29,7 +30,7 @@ const AnecdoteList = () => {
         <div>
             has {anecdote.votes}
             <button onClick={() => {
-              dispatch(vote(anecdote.id))
+              dispatch(vote(anecdote.id, anecdote.content, anecdote.votes))
               dispatch(voteNoti(anecdote.content))
               setTimeout(() => {
                 dispatch(resetNoti())
