@@ -2,7 +2,7 @@
   "notes": [
     {
       "content": "the app state is in redux store",
-      "important": true,
+      "important": false,
       "id": "1"
     },
     {
@@ -13,7 +13,57 @@
     {
       "id": "6abc",
       "content": "123",
+      "important": true
+    },
+    {
+      "id": "dd52",
+      "content": "test",
+      "important": true
+    },
+    {
+      "id": "1ad2",
+      "content": "test5",
+      "important": true
+    },
+    {
+      "id": "bb60",
+      "content": "adfasd",
       "important": false
+    },
+    {
+      "id": "5bb5",
+      "content": "test244",
+      "important": true
+    },
+    {
+      "id": "3cc3",
+      "content": "123",
+      "important": true
+    },
+    {
+      "id": "3f58",
+      "content": "rasdf",
+      "important": false
+    },
+    {
+      "id": "20b8",
+      "content": "asdfr3",
+      "important": true
+    },
+    {
+      "id": "c35f",
+      "content": "asdfre",
+      "important": true
+    },
+    {
+      "id": "b116",
+      "content": "test3443545",
+      "important": true
+    },
+    {
+      "id": "1057",
+      "content": "asdfqewr",
+      "important": true
     }
   ]
 }
