@@ -1,7 +1,6 @@
 import { useDispatch } from "react-redux";
 import { addAnecdoteAction } from "../reducers/anecdoteReducer";
-import { createNoti, resetNoti } from "../reducers/notificationReducer";
-import services from '../services/anecdotes'
+import { actionNoti } from "../reducers/notificationReducer";
 
 const AnecdoteForm = () => {
 
@@ -11,10 +10,7 @@ const AnecdoteForm = () => {
         event.preventDefault()
         const content = event.target.input.value
         dispatch(addAnecdoteAction(content))
-        dispatch(createNoti(content))
-        setTimeout(() => {
-          dispatch(resetNoti())
-        }, 5000);
+        dispatch(actionNoti(`you created a note '${content}'`, 1000))
       }
 
     return (
