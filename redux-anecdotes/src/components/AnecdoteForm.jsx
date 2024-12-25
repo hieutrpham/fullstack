@@ -10,8 +10,7 @@ const AnecdoteForm = () => {
     const addAnecdote = async (event) => {
         event.preventDefault()
         const content = event.target.input.value
-        const newAnecdote = await services.createNew(content)
-        dispatch(addAnecdoteAction(newAnecdote))
+        dispatch(addAnecdoteAction(content))
         dispatch(createNoti(content))
         setTimeout(() => {
           dispatch(resetNoti())
