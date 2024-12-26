@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import {
-  Routes, Route, Link, Navigate, useParams, useNavigate, useMatch,
-  Links
+  Routes, Route, Link, useNavigate, useMatch
 } from 'react-router-dom'
 
 const Menu = () => {
@@ -29,7 +28,7 @@ const AnecdoteList = ({ anecdotes }) => (
 
 const Anecdote = ({anecdote}) => (
   <>
-    <h2>{anecdote.content}</h2>
+    <h2>{anecdote?.content}</h2>
   </>
 )
 
@@ -51,7 +50,7 @@ const Footer = () => (
   <div>
     Anecdote app for <a href='https://fullstackopen.com/'>Full Stack Open</a>.
 
-    See <a href='https://github.com/fullstack-hy2020/routed-anecdotes/blob/master/src/App.js'>https://github.com/fullstack-hy2020/routed-anecdotes/blob/master/src/App.js</a> for the source code.
+    See <a href='https://github.com/fullstack-hy2020/routed-anecdotes/blob/master/src/App.js'>Github</a> for the source code.
   </div>
 )
 
@@ -59,7 +58,7 @@ const CreateNew = (props) => {
   const [content, setContent] = useState('')
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')
-
+  const navigate = useNavigate()
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -69,6 +68,11 @@ const CreateNew = (props) => {
       info,
       votes: 0
     })
+    navigate('/')
+    props.setNoti('anecdote created')  
+    setTimeout(() => {
+      props.setNoti('')
+    }, 1000);
   }
 
   return (
@@ -142,10 +146,12 @@ const App = () => {
     <div>
       <h1>Software anecdotes</h1>
 
+      <h2>{notification}</h2>
+
       <Menu />
 
       <Routes>
-        <Route path="/create" element={<CreateNew/>}/>
+        <Route path="/create" element={<CreateNew addNew={addNew} setNoti={setNotification}/>}/>
         <Route path='/' element={<AnecdoteList anecdotes={anecdotes} />} />
         <Route path='/about' element={<About />} />
         <Route path='/anecdote/:id' element={<Anecdote anecdote={anecdote}/>}/>
