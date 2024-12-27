@@ -56,9 +56,9 @@ const Footer = () => (
 )
 
 const CreateNew = (props) => {
-  const {...content} = useField()
-  const {...author} = useField()
-  const {...info} = useField()
+  const {resetValue: resetContent, ...content} = useField('text')
+  const {resetValue: resetAuthor, ...author} = useField('text')
+  const {resetValue: resetInfo, ...info} = useField('text')
 
   const navigate = useNavigate()
 
@@ -66,9 +66,9 @@ const CreateNew = (props) => {
     e.preventDefault()
     
     props.addNew({
-      content: content.field,
-      author: author.field,
-      info: info.field,
+      content: content.value,
+      author: author.value,
+      info: info.value,
       votes: 0
     })
     navigate('/')
@@ -76,6 +76,14 @@ const CreateNew = (props) => {
     setTimeout(() => {
       props.setNoti('')
     }, 1000);
+  }
+
+  const handleReset = (e) => {
+    e.preventDefault()
+    resetAuthor()
+    console.log('qwer')
+    resetContent()
+    resetInfo()
   }
 
   return (
@@ -94,8 +102,10 @@ const CreateNew = (props) => {
           url for more info
           <input name='info' {...info} />
         </div>
-        <button>create</button>
+        <button type='submit'>create</button>
+        <button type='button' onClick={handleReset}>reset</button>
       </form>
+      
     </div>
   )
 
