@@ -1,65 +1,66 @@
-import AnecdoteForm from './components/AnecdoteForm'
-import Notification from './components/Notification'
-import {useQuery, useMutation, useQueryClient} from '@tanstack/react-query'
-import { getAnecdotes, updateAnecdotes } from './services'
+import AnecdoteForm from "./components/AnecdoteForm";
+import Notification from "./components/Notification";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { getAnecdotes, updateAnecdotes } from "./services";
+import { useTimeoutNoti } from "./reducers/notification";
 
 const App = () => {
-
-  const queryClient = useQueryClient()
+  const queryClient = useQueryClient();
+  const timeoutNoti = useTimeoutNoti();
 
   const updateMutation = useMutation({
     mutationFn: updateAnecdotes,
     onSuccess: (newAnecdotes) => {
       // queryClient.invalidateQueries({queryKey: ['anecdotes']})
-      const anecdotes = queryClient.getQueryData(['anecdotes'])
-      queryClient.setQueryData(['anecdotes'], anecdotes.map(item => 
-        item.id === newAnecdotes.id 
-        ? newAnecdotes
-        : item
-      ))
-    }
-  })
+      const anecdotes = queryClient.getQueryData(["anecdotes"]);
+      queryClient.setQueryData(
+        ["anecdotes"],
+        anecdotes.map((item) =>
+          item.id === newAnecdotes.id ? newAnecdotes : item
+        )
+      );
+    },
+  });
 
   const handleVote = (anecdote) => {
-    updateMutation.mutate({...anecdote, votes: anecdote.votes + 1})
-  }
+    updateMutation.mutate({ ...anecdote, votes: anecdote.votes + 1 });
+    timeoutNoti(`you voted for ${anecdote.content}`, 3000);
+  };
 
   const result = useQuery({
-    queryKey: ['anecdotes'],
+    queryKey: ["anecdotes"],
     queryFn: getAnecdotes,
-    refetchOnWindowFocus: false
-  })
+    refetchOnWindowFocus: false,
+  });
 
   if (result.isLoading) {
-    return <div>loading data...</div>
+    return <div>loading data...</div>;
   }
 
   if (result.isError) {
-    return <div>error due to problem with server</div>
+    return <div>error due to problem with server</div>;
   }
 
-  const anecdotes = result.data 
+  const anecdotes = result.data;
 
   return (
     <div>
       <h3>Anecdote app</h3>
-    
+
       <Notification />
       <AnecdoteForm />
-    
-      {anecdotes.map(anecdote =>
+
+      {anecdotes.map((anecdote) => (
         <div key={anecdote.id}>
-          <div>
-            {anecdote.content}
-          </div>
+          <div>{anecdote.content}</div>
           <div>
             has {anecdote.votes}
             <button onClick={() => handleVote(anecdote)}>vote</button>
           </div>
         </div>
-      )}
+      ))}
     </div>
-  )
-}
+  );
+};
 
-export default App
+export default App;
