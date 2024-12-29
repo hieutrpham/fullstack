@@ -26,7 +26,7 @@ export const useDispatch = () => {
 export const useTimeoutNoti = () => {
   const dispatch = useDispatch();
 
-  const timeoutNoti = (content, timeout) => {
+  const timeoutNoti = (content, timeout=3000) => {
     dispatch({
       type: "NOTI",
       payload: content,
