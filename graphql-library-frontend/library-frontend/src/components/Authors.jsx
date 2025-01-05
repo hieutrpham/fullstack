@@ -15,7 +15,7 @@ const useField = (type) => {
 };
 
 const Authors = (props) => {
-  const name = useField("text");
+  const [name, setName] = useState("");
   const born = useField("number");
   const [editAuthor] = useMutation(UPDATE_AUTHOR, {
     refetchQueries: [{ query: ALL_AUTHORS }],
@@ -33,10 +33,9 @@ const Authors = (props) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const authorName = name.value;
     const authorBorn = Number(born.value);
 
-    editAuthor({ variables: { name: authorName, setBornTo: authorBorn } });
+    editAuthor({ variables: { name, setBornTo: authorBorn } });
   };
 
   return (
@@ -60,7 +59,16 @@ const Authors = (props) => {
       </table>
       <h2>Set Birthyear</h2>
       <form onSubmit={handleSubmit}>
-        name <input {...name} />
+        <select
+          value={name}
+          onChange={(e) => {
+            setName(e.target.value);
+          }}
+        >
+          {authors.map((a, index) => (
+            <option key={index}>{a.name}</option>
+          ))}
+        </select>
         <br />
         born <input {...born} />
         <br />
