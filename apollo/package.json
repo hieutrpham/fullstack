@@ -8,11 +8,16 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node index.js",
+    "dev": "nodemon index.js"
   },
   "dependencies": {
     "@apollo/client": "^3.12.4",
     "@apollo/server": "^4.11.2",
-    "graphql": "^16.10.0"
+    "dotenv": "^16.4.7",
+    "graphql": "^16.10.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.9.3",
+    "nodemon": "^3.1.9"
   }
 }
