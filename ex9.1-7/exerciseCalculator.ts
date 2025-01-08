@@ -8,17 +8,16 @@ interface Result {
   average: number;
 }
 
-const calculateExercises = (exercises: number[]): Result => {
+const calculateExercises = (exercises: number[], target: number): Result => {
   const x = exercises.length;
   const trainingDays = exercises.reduce(
     (acc, cur) => (cur > 0 ? acc + 1 : acc),
     0
   );
-  const target = 2;
   const average = exercises.reduce((acc, cur) => acc + cur, 0) / x;
   const success = average >= target ? true : false;
-  const rating = 2;
-  const ratingDescription = "not bad";
+  const rating = success ? 1 : 0;
+  const ratingDescription = rating === 1 ? "not bad" : "could do better";
 
   return {
     periodLength: x,

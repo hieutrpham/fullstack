@@ -13,10 +13,14 @@
     "dev": "tsx watch index.ts"
   },
   "devDependencies": {
+    "@eslint/js": "^9.17.0",
+    "@types/eslint__js": "^8.42.3",
     "@types/express": "^5.0.0",
+    "eslint": "^9.17.0",
     "ts-node": "^10.9.2",
     "tsx": "^4.19.2",
-    "typescript": "^5.7.2"
+    "typescript": "^5.7.2",
+    "typescript-eslint": "^8.19.1"
   },
   "dependencies": {
     "express": "^4.21.2"
