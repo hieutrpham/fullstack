@@ -5,11 +5,11 @@
   "license": "ISC",
   "author": "",
   "type": "commonjs",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "tsc": "tsc",
-    "dev": "tsx watch index.ts",
+    "dev": "tsx watch src/index.ts",
     "start": "node build/index.js"
   },
   "devDependencies": {
