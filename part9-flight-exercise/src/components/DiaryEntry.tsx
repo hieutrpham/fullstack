@@ -1,23 +1,22 @@
-import { DiaryEntry } from "../types"
+import { DiaryEntry } from "../types";
 
 interface DiaryProps {
-  content: DiaryEntry
+  content: DiaryEntry;
 }
 
-const Diary = ({content}: DiaryProps) => {
+const Diary = ({ content }: DiaryProps) => {
   return (
     <>
       <p>
         <strong>{content.date}</strong>
       </p>
-      {content.visibility}
-      <br/>
-      {content.weather}
-      <br/>
-      {content.comment}
+      visibility: {content.visibility}
+      <br />
+      weather: {content.weather}
+      <br />
+      {content.comment && <>comment: {content.comment}</>}
     </>
-  )
-  
-}
+  );
+};
 
-export default Diary
+export default Diary;
