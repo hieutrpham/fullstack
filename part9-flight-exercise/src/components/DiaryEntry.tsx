@@ -14,7 +14,7 @@ const Diary = ({ content }: DiaryProps) => {
       <br />
       weather: {content.weather}
       <br />
-      {content.comment && <>comment: {content.comment}</>}
+      {content.comment ? <>comment: {content.comment}</> : null}
     </>
   );
 };

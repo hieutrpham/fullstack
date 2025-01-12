@@ -26,7 +26,8 @@ const DiaryForm: React.FC<DiaryFormProps> = ({
   return (
     <form onSubmit={onSubmit}>
       Date: <input type="date" value={date} onChange={onDateChange} /> <br />
-      Visibility: <input value={visibility} onChange={onVisibilityChange} />
+      Visibility:
+      <input type="radio" value={visibility} onChange={onVisibilityChange} />
       <br />
       Weather: <input value={weather} onChange={onWeatherChange} />
       <br />
