@@ -11,6 +11,23 @@ const getPatient = (): NonSensitivePatient[] => {
   }));
 };
 
+const getSinglePatient = (id: string) => {
+  const p = patientData.find((i) => i.id === id);
+  if (p) {
+    return {
+      id: p.id,
+      name: p.name,
+      dateOfBirth: p.dateOfBirth,
+      gender: p.gender,
+      occupation: p.occupation,
+      entries: p.entries,
+    };
+  } else {
+    return { error: "not found" };
+  }
+};
+
 export default {
   getPatient,
+  getSinglePatient,
 };

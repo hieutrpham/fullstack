@@ -18,6 +18,11 @@ const newPatientParser = (req: Request, _res: Response, next: NextFunction) => {
   }
 };
 
+router.get("/:id", (req, res) => {
+  console.log(req.params.id);
+  res.send(patientService.getSinglePatient(req.params.id));
+});
+
 const errorMiddleware = (
   error: unknown,
   _req: Request,

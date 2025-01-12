@@ -12,6 +12,8 @@ export type Diagnosis = {
   latin?: string;
 };
 
+export interface Entry {}
+
 export type Patient = {
   id: string;
   name: string;
@@ -19,9 +21,10 @@ export type Patient = {
   ssn: string;
   gender: Gender;
   occupation: string;
+  entries: Entry[];
 };
 
-export type NonSensitivePatient = Omit<Patient, "ssn">;
+export type NonSensitivePatient = Omit<Patient, "ssn" | "entries">;
 
 export const NewPatient = z.object({
   name: z.string(),
