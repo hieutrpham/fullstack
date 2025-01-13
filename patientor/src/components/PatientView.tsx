@@ -1,10 +1,11 @@
-import { Patient } from "../types";
+import { Diagnosis, Patient } from "../types";
 
 interface PropsType {
   patient: Patient;
+  diagnoses: Diagnosis[];
 }
 
-const PatientView = ({ patient }: PropsType) => {
+const PatientView = ({ patient, diagnoses }: PropsType) => {
   return (
     <>
       <h2>{patient.name}</h2>
@@ -17,7 +18,14 @@ const PatientView = ({ patient }: PropsType) => {
           <em>{e.description}</em>
           <ul>
             {e.diagnosisCodes &&
-              e.diagnosisCodes.map((c, i) => <li key={i}>{c}</li>)}
+              e.diagnosisCodes.map((code, i) => (
+                <li key={i}>
+                  {code}: {""}
+                  {diagnoses.map((diagnose) =>
+                    diagnose.code === code ? diagnose.name : ""
+                  )}
+                </li>
+              ))}
           </ul>
         </div>
       ))}

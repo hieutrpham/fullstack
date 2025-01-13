@@ -1,29 +1,28 @@
 import { useState, useEffect } from "react";
-import axios from "axios";
 import { Route, Link, Routes, useMatch } from "react-router-dom";
 import { Button, Divider, Container, Typography } from "@mui/material";
-
-import { apiBaseUrl } from "./constants";
-import { Patient } from "./types";
-
+import { Diagnosis, Patient } from "./types";
 import patientService from "./services/patients";
 import PatientListPage from "./components/PatientListPage";
 import PatientView from "./components/PatientView";
 
 const App = () => {
   const [patients, setPatients] = useState<Patient[]>([]);
+  const [diagnoses, setDiagnoses] = useState<Diagnosis[]>([]);
+
   const match = useMatch("api/patients/:id");
   const patient = match ? patients.find((i) => i.id === match.params.id) : null;
 
   useEffect(() => {
-    void axios.get<void>(`${apiBaseUrl}/ping`);
-
-    const fetchPatientList = async () => {
+    const fetchData = async () => {
       const patients = await patientService.getAll();
-      console.log(patients);
       setPatients(patients);
+
+      const diagnoses = await patientService.getDiagnoses();
+      setDiagnoses(diagnoses);
     };
-    void fetchPatientList();
+
+    fetchData();
   }, []);
 
   return (
@@ -45,9 +44,14 @@ const App = () => {
           />
           <Route
             path="api/patients/:id"
-            element={patient && <PatientView patient={patient} />}
+            element={
+              patient ? (
+                <PatientView patient={patient} diagnoses={diagnoses} />
+              ) : (
+                <>Loading...</>
+              )
+            }
           />
-          <Route path="*" element={<>not found</>} />
         </Routes>
       </Container>
     </div>
