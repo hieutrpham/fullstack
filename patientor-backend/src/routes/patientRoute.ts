@@ -1,7 +1,7 @@
-import express, { NextFunction, Request, Response } from "express";
+import express, { Request, Response } from "express";
 import patientService from "../services/patientService";
-import { NewPatient, Patient } from "../types";
-import { z } from "zod";
+import { Patient } from "../types";
+import { newPatientParser, errorMiddleware } from "../middlewares";
 
 const router = express.Router();
 
@@ -9,32 +9,9 @@ router.get("/", (_req, res) => {
   res.send(patientService.getPatient());
 });
 
-const newPatientParser = (req: Request, _res: Response, next: NextFunction) => {
-  try {
-    NewPatient.parse(req.body);
-    next();
-  } catch (error: unknown) {
-    next(error);
-  }
-};
-
 router.get("/:id", (req, res) => {
-  console.log(req.params.id);
   res.send(patientService.getSinglePatient(req.params.id));
 });
-
-const errorMiddleware = (
-  error: unknown,
-  _req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  if (error instanceof z.ZodError) {
-    res.status(400).send({ error: error.issues });
-  } else {
-    next(error);
-  }
-};
 
 router.post(
   "/",
