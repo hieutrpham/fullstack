@@ -20,6 +20,7 @@ const App = () => {
 
     const fetchPatientList = async () => {
       const patients = await patientService.getAll();
+      console.log(patients);
       setPatients(patients);
     };
     void fetchPatientList();
@@ -46,6 +47,7 @@ const App = () => {
             path="api/patients/:id"
             element={patient && <PatientView patient={patient} />}
           />
+          <Route path="*" element={<>not found</>} />
         </Routes>
       </Container>
     </div>

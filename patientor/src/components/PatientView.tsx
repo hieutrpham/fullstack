@@ -9,7 +9,18 @@ const PatientView = ({ patient }: PropsType) => {
     <>
       <h2>{patient.name}</h2>
       Gender: {patient.gender} <br />
-      Occupation: {patient.occupation}
+      Occupation: {patient.occupation} <br />
+      Entries: <br />
+      {patient.entries.map((e, i) => (
+        <div key={i}>
+          <strong>{e.date}: </strong>
+          <em>{e.description}</em>
+          <ul>
+            {e.diagnosisCodes &&
+              e.diagnosisCodes.map((c, i) => <li key={i}>{c}</li>)}
+          </ul>
+        </div>
+      ))}
     </>
   );
 };

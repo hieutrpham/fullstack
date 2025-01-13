@@ -64,7 +64,7 @@ export type Patient = {
   entries: Entry[];
 };
 
-export type NonSensitivePatient = Omit<Patient, "ssn" | "entries">;
+export type NonSensitivePatient = Omit<Patient, "ssn">;
 
 export const NewPatient = z.object({
   name: z.string(),
