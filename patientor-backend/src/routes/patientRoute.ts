@@ -1,7 +1,13 @@
 import express, { Request, Response } from "express";
 import patientService from "../services/patientService";
 import { Patient } from "../types";
-import { newPatientParser, errorMiddleware } from "../middlewares";
+import {
+  newPatientParser,
+  errorMiddleware,
+  newEntryParser,
+} from "../middlewares";
+import patients from "../../data/patients";
+import { v1 } from "uuid";
 
 const router = express.Router();
 
@@ -17,9 +23,16 @@ router.post(
   "/",
   newPatientParser,
   (req: Request<unknown, unknown, Patient>, res: Response<Patient>) => {
+    patients.concat({ ...req.body, id: v1() });
     res.send({ ...req.body });
   }
 );
+
+router.post("/:id/entries", newEntryParser, (req, res) => {
+  const patient = patients.find((p) => p.id === req.params.id);
+  patient?.entries.concat({ ...req.body });
+  res.send({ ...req.body });
+});
 
 router.use(errorMiddleware);
 
