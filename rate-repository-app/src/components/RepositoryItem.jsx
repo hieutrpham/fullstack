@@ -1,10 +1,13 @@
-import { View, Text } from "react-native";
+import { View } from "react-native";
+import Text from "./Text";
 
 const RepositoryItem = ({ item }) => {
   return (
     <View>
-      <Text>Full Name: {item.fullName}</Text>
-      <Text>Description: {item.description}</Text>
+      <Text color="primary" fontWeight="bold">
+        Full Name: {item.fullName}
+      </Text>
+      <Text color="textSecondary">Description: {item.description}</Text>
       <Text>Language: {item.language}</Text>
       <Text>Forks: {item.forksCount}</Text>
       <Text>Stars: {item.stargazersCount}</Text>
