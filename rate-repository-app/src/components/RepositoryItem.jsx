@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   textStat: {
+    fontFamily: theme.fonts.main,
     fontWeight: "bold",
     textAlign: "center",
   },
