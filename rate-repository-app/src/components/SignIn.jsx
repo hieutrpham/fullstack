@@ -2,6 +2,12 @@ import { useFormik } from "formik";
 import { Pressable, StyleSheet, TextInput, View } from "react-native";
 import Text from "./Text";
 import theme from "../theme";
+import * as yup from "yup";
+
+const validationSchema = yup.object().shape({
+  username: yup.string().required("Username is required"),
+  password: yup.string().required("Password is required"),
+});
 
 const styles = StyleSheet.create({
   container: {
@@ -20,6 +26,12 @@ const styles = StyleSheet.create({
     borderColor: "grey",
     borderWidth: 2,
     paddingHorizontal: 10,
+    color: theme.colors.textSecondary,
+  },
+
+  errorStyle: {
+    color: theme.colors.error,
+    width: "80%",
   },
 
   buttonStyle: {
@@ -34,6 +46,7 @@ const styles = StyleSheet.create({
 const SignIn = () => {
   const formik = useFormik({
     initialValues: { username: "", password: "" },
+    validationSchema,
     onSubmit: () => console.log(formik.values.username, formik.values.password),
   });
 
@@ -43,16 +56,28 @@ const SignIn = () => {
         placeholder="username"
         value={formik.values.username}
         onChangeText={formik.handleChange("username")}
-        style={styles.textStyle}
+        style={[
+          styles.textStyle,
+          { borderColor: formik.errors.username && theme.colors.error },
+        ]}
       />
+      {formik.touched.username && formik.errors.username && (
+        <Text style={styles.errorStyle}>{formik.errors.username}</Text>
+      )}
 
       <TextInput
         placeholder="password"
         value={formik.values.password}
         onChangeText={formik.handleChange("password")}
         secureTextEntry={true}
-        style={styles.textStyle}
+        style={[
+          styles.textStyle,
+          { borderColor: formik.errors.password && theme.colors.error },
+        ]}
       />
+      {formik.touched.password && formik.errors.password && (
+        <Text style={styles.errorStyle}>{formik.errors.password}</Text>
+      )}
 
       <Pressable onPress={formik.handleSubmit} style={styles.buttonStyle}>
         <Text style={{ color: "white", alignSelf: "center" }}>Submit</Text>
