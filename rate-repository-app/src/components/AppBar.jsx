@@ -13,7 +13,6 @@ const styles = StyleSheet.create({
     padding: 2,
     backgroundColor: theme.colors.primary,
     borderRadius: 5,
-    padding: 5,
     margin: 5,
   },
 });
