@@ -1,6 +1,7 @@
-import { Image, View, StyleSheet, Dimensions } from "react-native";
+import { Image, View, StyleSheet, Pressable } from "react-native";
 import Text from "./Text";
 import theme from "../theme";
+import { openURL } from "expo-linking";
 
 const styles = StyleSheet.create({
   flexRow: {
@@ -44,7 +45,7 @@ const formatNumber = (num) => {
   return num.toString();
 };
 
-const RepositoryItem = ({ item }) => {
+const RepositoryItem = ({ item, show = false }) => {
   return (
     <View
       style={{
@@ -74,6 +75,7 @@ const RepositoryItem = ({ item }) => {
           <Text style={styles.languageContainer}>{item.language}</Text>
         </View>
       </View>
+
       <View style={[styles.flexRow, { justifyContent: "space-around" }]}>
         <View style={styles.flexColumn}>
           <Text style={styles.textStat}>{formatNumber(item.forksCount)}</Text>
@@ -97,6 +99,24 @@ const RepositoryItem = ({ item }) => {
           <Text>Ratings</Text>
         </View>
       </View>
+
+      {show ? (
+        <Pressable onPress={() => openURL(item.url)}>
+          <Text
+            style={[
+              styles.languageContainer,
+              {
+                alignSelf: "center",
+                borderRadius: 2,
+                width: "80%",
+                textAlign: "center",
+              },
+            ]}
+          >
+            Open in GitHub
+          </Text>
+        </Pressable>
+      ) : null}
     </View>
   );
 };
