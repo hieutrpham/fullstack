@@ -28,10 +28,11 @@ const AppBar = () => {
   const client = useApolloClient();
   const navigate = useNavigate();
 
+  if (loading) return <Text>Loading...</Text>;
+
   const handlePress = async () => {
     await authStorage.removeAccessToken();
     client.resetStore();
-    // console.log("token after log out", authStorage.getAccessToken());
     navigate("/signin");
   };
 
@@ -41,7 +42,7 @@ const AppBar = () => {
         <Link to="/">
           <Text style={styles.textStyle}>Repositories</Text>
         </Link>
-        {data ? (
+        {data.me ? (
           <Pressable onPress={handlePress}>
             <Text style={styles.textStyle}>Sign Out</Text>
           </Pressable>

@@ -57,7 +57,6 @@ const SignIn = () => {
         username: formik.values.username,
         password: formik.values.password,
       });
-      // console.log(data.authenticate.accessToken);
       navigate("/");
     },
   });
