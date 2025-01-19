@@ -34,6 +34,18 @@ export const GET_REPOSITORY = gql`
   query ($repositoryId: ID!) {
     repository(id: $repositoryId) {
       ...RepoDetails
+      reviews {
+        edges {
+          node {
+            text
+            rating
+            createdAt
+            user {
+              username
+            }
+          }
+        }
+      }
     }
   }
   ${REPO_DETAILS}

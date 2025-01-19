@@ -7,18 +7,13 @@ const styles = StyleSheet.create({
   flexRow: {
     display: "flex",
     flexDirection: "row",
-    // flexWrap: "wrap",
     alignItems: "flex-start",
   },
   flexColumn: {
     display: "flex",
-    flexDirection: "column",
     padding: 5,
-    maxWidth: "100%",
   },
   text: {
-    flexShrink: 1,
-    flexWrap: "wrap",
     width: "100%",
     overflow: "hidden",
   },
