@@ -4,6 +4,7 @@ import RepositoryList from "./RepositoryList";
 import { Route, Routes, Navigate } from "react-router-native";
 import SignIn from "./SignIn";
 import RepositoryView from "./RepositoryView";
+import ReviewForm from "./ReviewForm";
 
 const styles = StyleSheet.create({
   container: {
@@ -22,6 +23,7 @@ const Main = () => {
         <Route path="/signin" element={<SignIn />} />
         <Route path="*" element={<Navigate to="/" replace />} />
         <Route path="/:repoid" element={<RepositoryView />} />
+        <Route path="/createreview" element={<ReviewForm />} />
       </Routes>
     </View>
   );

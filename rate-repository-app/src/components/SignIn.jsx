@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import { Pressable, StyleSheet, TextInput, View } from "react-native";
+import { Alert, Pressable, StyleSheet, TextInput, View } from "react-native";
 import Text from "./Text";
 import theme from "../theme";
 import * as yup from "yup";
@@ -46,18 +46,22 @@ const styles = StyleSheet.create({
   },
 });
 const SignIn = () => {
-  const [signIn, data] = useSignIn();
+  const [signIn] = useSignIn();
   const navigate = useNavigate();
 
   const formik = useFormik({
     initialValues: { username: "", password: "" },
     validationSchema,
     onSubmit: async () => {
-      await signIn({
-        username: formik.values.username,
-        password: formik.values.password,
-      });
-      navigate("/");
+      try {
+        await signIn({
+          username: formik.values.username,
+          password: formik.values.password,
+        });
+        navigate("/");
+      } catch (error) {
+        Alert.alert(error.message);
+      }
     },
   });
 
