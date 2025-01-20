@@ -3,6 +3,7 @@ import RepositoryItem from "./RepositoryItem";
 import useRepositories from "../hooks/useRepositories";
 import Text from "./Text";
 import { useNavigate } from "react-router-native";
+import FilterMenu from "./FilterMenu";
 
 const styles = StyleSheet.create({
   separator: {
@@ -13,7 +14,7 @@ const styles = StyleSheet.create({
 const ItemSeparator = () => <View style={styles.separator} />;
 
 const RepositoryList = () => {
-  const { data, loading, error } = useRepositories();
+  const { data, loading, refetch } = useRepositories();
   const navigate = useNavigate();
   if (loading) {
     return <Text>Loading...</Text>;
@@ -32,6 +33,7 @@ const RepositoryList = () => {
           <RepositoryItem item={item} />
         </Pressable>
       )}
+      ListHeaderComponent={<FilterMenu refetch={refetch} />}
     />
   );
 };
