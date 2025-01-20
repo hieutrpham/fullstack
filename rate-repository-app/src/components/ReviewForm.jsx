@@ -21,6 +21,12 @@ const validationSchema = yup.object().shape({
 });
 
 const styles = StyleSheet.create({
+  container: {
+    display: "flex",
+    backgroundColor: theme.colors.background,
+    flex: 1,
+    alignItems: "center",
+  },
   textStyle: {
     borderRadius: 10,
     padding: 10,
@@ -77,7 +83,7 @@ const ReviewForm = () => {
   });
 
   return (
-    <View>
+    <View style={styles.container}>
       <TextInput
         placeholder="Repository owner name"
         value={formik.values.ownerName}

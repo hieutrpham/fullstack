@@ -46,7 +46,11 @@ const AppBar = () => {
           <Link to="/createreview">
             <Text style={styles.textStyle}>Create a review</Text>
           </Link>
-        ) : null}
+        ) : (
+          <Link to="/signup">
+            <Text style={styles.textStyle}>Sign up</Text>
+          </Link>
+        )}
 
         {data.me ? (
           <Pressable onPress={handlePress}>

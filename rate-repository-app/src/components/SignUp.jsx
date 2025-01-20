@@ -3,19 +3,24 @@ import { Alert, Pressable, StyleSheet, TextInput, View } from "react-native";
 import Text from "./Text";
 import theme from "../theme";
 import * as yup from "yup";
-import useSignIn from "../hooks/useSignIn";
 import { useNavigate } from "react-router-native";
+import { CREATE_USER } from "../graphql/mutations";
+import { useMutation } from "@apollo/client";
+import useSignIn from "../hooks/useSignIn";
 
 const validationSchema = yup.object().shape({
   username: yup.string().required("Username is required"),
   password: yup.string().required("Password is required"),
+  passwordConfirm: yup
+    .string()
+    .oneOf([yup.ref("password"), "must match"])
+    .required("Password confirm is required"),
 });
 
 const styles = StyleSheet.create({
   container: {
     alignItems: "center",
   },
-
   textStyle: {
     borderRadius: 10,
     padding: 10,
@@ -27,12 +32,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     color: theme.colors.textSecondary,
   },
-
-  errorStyle: {
-    color: theme.colors.error,
-    width: "80%",
-  },
-
   buttonStyle: {
     width: "80%",
     alignContent: "center",
@@ -41,24 +40,42 @@ const styles = StyleSheet.create({
     padding: 10,
     margin: 10,
   },
+  errorStyle: {
+    color: theme.colors.error,
+    width: "80%",
+  },
 });
-const SignIn = () => {
-  const [signIn] = useSignIn();
+
+const SignUp = () => {
   const navigate = useNavigate();
+  const [createUser] = useMutation(CREATE_USER);
+  const [signIn] = useSignIn();
 
   const formik = useFormik({
-    initialValues: { username: "", password: "" },
+    initialValues: {
+      username: "",
+      password: "",
+      passwordConfirm: "",
+    },
     validationSchema,
     onSubmit: async () => {
-      try {
-        await signIn({
-          username: formik.values.username,
-          password: formik.values.password,
-        });
-        navigate("/");
-      } catch (error) {
-        Alert.alert(error.message);
-      }
+      await createUser({
+        variables: {
+          user: {
+            username: formik.values.username,
+            password: formik.values.password,
+          },
+        },
+      });
+
+      Alert.alert("Thank you for signing up");
+
+      await signIn({
+        username: formik.values.username,
+        password: formik.values.password,
+      });
+
+      navigate("/");
     },
   });
 
@@ -91,6 +108,20 @@ const SignIn = () => {
         <Text style={styles.errorStyle}>{formik.errors.password}</Text>
       )}
 
+      <TextInput
+        placeholder="confirm password"
+        value={formik.values.passwordConfirm}
+        onChangeText={formik.handleChange("passwordConfirm")}
+        secureTextEntry={true}
+        style={[
+          styles.textStyle,
+          { borderColor: formik.errors.passwordConfirm && theme.colors.error },
+        ]}
+      />
+      {formik.touched.passwordConfirm && formik.errors.passwordConfirm && (
+        <Text style={styles.errorStyle}>{formik.errors.passwordConfirm}</Text>
+      )}
+
       <Pressable onPress={formik.handleSubmit} style={styles.buttonStyle}>
         <Text style={{ color: "white", alignSelf: "center" }}>Submit</Text>
       </Pressable>
@@ -98,4 +129,4 @@ const SignIn = () => {
   );
 };
 
-export default SignIn;
+export default SignUp;
