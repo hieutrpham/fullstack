@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Button, Menu } from "react-native-paper";
+import Text from "./Text";
+import { Icon } from "react-native-paper";
 
 const styles = StyleSheet.create({
   menu: {
@@ -45,7 +47,10 @@ const FilterMenu = ({ refetch }) => {
         visible={visible}
         onDismiss={closeMenu}
         anchor={
-          <Button onPress={openMenu}>Change listed repositories order</Button>
+          <Button onPress={openMenu}>
+            <Text>Change listed repositories order</Text>
+            <Icon source="arrow-down-drop-circle" size={12} />
+          </Button>
         }
         style={styles.menu}
       >

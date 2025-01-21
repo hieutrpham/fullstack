@@ -26,7 +26,10 @@
     "@apollo/client": "^3.12.6",
     "@expo/metro-config": "^0.17.4",
     "@expo/metro-runtime": "4.0.0",
+    "@mdi/js": "^7.4.47",
+    "@mdi/react": "^1.6.1",
     "@react-native-async-storage/async-storage": "1.23.1",
+    "@react-native-vector-icons/common": "^11.0.0",
     "dotenv": "^16.4.7",
     "expo": "^52.0.25",
     "expo-linking": "^7.0.4",
@@ -39,6 +42,7 @@
     "react-native-paper": "^5.13.1",
     "react-native-web": "^0.19.13",
     "react-router-native": "^6.28.1",
+    "use-debounce": "^10.0.4",
     "yup": "^1.6.1"
   },
   "devDependencies": {
