@@ -54,6 +54,14 @@ class RepositoryListContainer extends React.Component {
 const RepositoryList = () => {
   const { data, loading, refetch } = useRepositories();
 
+  const [localData, setLocalData] = React.useState(data);
+
+  React.useEffect(() => {
+    if (data) {
+      setLocalData(data);
+    }
+  }, [data]);
+
   const memoRefetch = React.useCallback(
     (variable) => refetch(variable),
     [refetch]
@@ -63,7 +71,7 @@ const RepositoryList = () => {
 
   return (
     <RepositoryListContainer
-      data={data}
+      data={localData}
       loading={loading}
       refetch={memoRefetch}
       navigate={navigate}

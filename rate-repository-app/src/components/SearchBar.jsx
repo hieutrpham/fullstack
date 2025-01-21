@@ -7,12 +7,15 @@ const SearchBar = ({ refetch }) => {
   const [debounceQuery] = useDebounce(searchQuery, 500);
 
   useEffect(() => {
-    if (debounceQuery !== "") {
-      refetch({ searchKeyword: debounceQuery });
-    }
+    const query =
+      debounceQuery.trim() !== ""
+        ? { searchKeyword: debounceQuery.trim() }
+        : {};
+
+    refetch(query).then(() => console.log("refetch successful"));
   }, [debounceQuery, refetch]);
 
-  console.log("query: ", searchQuery);
+  console.log("query: ", debounceQuery);
 
   return (
     <Searchbar
