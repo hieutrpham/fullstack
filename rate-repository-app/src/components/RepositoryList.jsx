@@ -27,7 +27,7 @@ class RepositoryListContainer extends React.Component {
   };
 
   render() {
-    const { data, loading, navigate } = this.props;
+    const { data, loading, navigate, onEndReached } = this.props;
     if (loading) {
       return <Text>Loading...</Text>;
     }
@@ -46,13 +46,15 @@ class RepositoryListContainer extends React.Component {
           </Pressable>
         )}
         ListHeaderComponent={this.renderHeader}
+        onEndReached={onEndReached}
+        onEndReachedThreshold={0.5}
       />
     );
   }
 }
 
 const RepositoryList = () => {
-  const { data, loading, refetch } = useRepositories();
+  const { data, loading, fetchMore, refetch } = useRepositories({ first: 5 });
 
   const [localData, setLocalData] = React.useState(data);
 
@@ -69,12 +71,18 @@ const RepositoryList = () => {
 
   const navigate = useNavigate();
 
+  const onEndReach = () => {
+    console.log("end reached");
+    fetchMore();
+  };
+
   return (
     <RepositoryListContainer
       data={localData}
       loading={loading}
       refetch={memoRefetch}
       navigate={navigate}
+      onEndReached={onEndReach}
     />
   );
 };
