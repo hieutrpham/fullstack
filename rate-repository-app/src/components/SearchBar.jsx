@@ -15,8 +15,6 @@ const SearchBar = ({ refetch }) => {
     refetch(query).then(() => console.log("refetch successful"));
   }, [debounceQuery, refetch]);
 
-  console.log("query: ", debounceQuery);
-
   return (
     <Searchbar
       placeholder="Search"
