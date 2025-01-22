@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
 });
 
 const AppBar = () => {
-  const { loading, error, data } = useQuery(ME);
+  const { loading, data } = useQuery(ME);
   const authStorage = useAuthStorage();
   const client = useApolloClient();
   const navigate = useNavigate();
@@ -43,23 +43,29 @@ const AppBar = () => {
           <Text style={styles.textStyle}>Repositories</Text>
         </Link>
         {data.me ? (
-          <Link to="/createreview">
-            <Text style={styles.textStyle}>Create a review</Text>
-          </Link>
-        ) : (
-          <Link to="/signup">
-            <Text style={styles.textStyle}>Sign up</Text>
-          </Link>
-        )}
+          <View style={{ flexDirection: "row" }}>
+            <Link to="/myreviews">
+              <Text style={styles.textStyle}>My reviews</Text>
+            </Link>
 
-        {data.me ? (
-          <Pressable onPress={handlePress}>
-            <Text style={styles.textStyle}>Sign Out</Text>
-          </Pressable>
+            <Link to="/createreview">
+              <Text style={styles.textStyle}>Create a review</Text>
+            </Link>
+
+            <Pressable onPress={handlePress}>
+              <Text style={styles.textStyle}>Sign Out</Text>
+            </Pressable>
+          </View>
         ) : (
-          <Link to="/signin">
-            <Text style={styles.textStyle}>Sign In</Text>
-          </Link>
+          <View style={{ flexDirection: "row" }}>
+            <Link to="/signup">
+              <Text style={styles.textStyle}>Sign up</Text>
+            </Link>
+
+            <Link to="/signin">
+              <Text style={styles.textStyle}>Sign In</Text>
+            </Link>
+          </View>
         )}
       </ScrollView>
     </View>

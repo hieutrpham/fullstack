@@ -6,6 +6,7 @@ import SignIn from "./SignIn";
 import RepositoryView from "./RepositoryView";
 import ReviewForm from "./ReviewForm";
 import SignUp from "./SignUp";
+import CurrentUserReview from "./CurrentUserReview";
 
 const styles = StyleSheet.create({
   container: {
@@ -26,6 +27,7 @@ const Main = () => {
         <Route path="*" element={<Navigate to="/" replace />} />
         <Route path="/:repoid" element={<RepositoryView />} />
         <Route path="/createreview" element={<ReviewForm />} />
+        <Route path="/myreviews" element={<CurrentUserReview />} />
       </Routes>
     </View>
   );
