@@ -1,6 +1,8 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, CSSProperties } from "react";
 import { Entry, BaseEntry, Diagnosis } from "../types";
 import patientService from "../services/patients";
+import EventSharpIcon from "@mui/icons-material/EventSharp";
+import FavoriteSharpIcon from "@mui/icons-material/FavoriteSharp";
 
 const assertNever = (value: never): never => {
   throw new Error(
@@ -17,20 +19,24 @@ const Base = ({
 }) => {
   return (
     <>
-      <em>Date: {entry.date}</em> <br />
+      <em>
+        <EventSharpIcon style={{ marginTop: 10 }} /> {entry.date}
+      </em>
       Description: {entry.description} <br />
       Specialist: {entry.specialist} <br />
-      Diagnoses:{" "}
-      {entry.diagnosisCodes
-        ? entry.diagnosisCodes.map((code, i) => (
+      {entry.diagnosisCodes ? (
+        <>
+          Diagnoses:
+          {entry.diagnosisCodes.map((code, i) => (
             <li key={i}>
               {code}: {""}
               {diagnoses.map((diagnose) =>
                 diagnose.code === code ? diagnose.name : ""
               )}
             </li>
-          ))
-        : null}
+          ))}
+        </>
+      ) : null}
     </>
   );
 };
@@ -53,14 +59,18 @@ const EntryDetail = ({ entries }: { entries: Entry[] }) => {
         switch (entry.type) {
           case "HealthCheck":
             return (
-              <div key={index}>
+              <div key={index} style={styles.container}>
                 <Base entry={entry} diagnoses={diagnoses} /> <br />
-                Health Rating: {entry.healthCheckRating}
+                <FavoriteSharpIcon
+                  style={{
+                    color: healthCheckColors[entry.healthCheckRating] || "red",
+                  }}
+                />
               </div>
             );
           case "Hospital":
             return (
-              <div key={index}>
+              <div key={index} style={styles.container}>
                 <Base entry={entry} diagnoses={diagnoses} />
                 Discharge date: {entry.discharge.date} <br />
                 Discharge criteria: {entry.discharge.criteria}
@@ -68,11 +78,16 @@ const EntryDetail = ({ entries }: { entries: Entry[] }) => {
             );
           case "OccupationalHealthcare":
             return (
-              <div key={index}>
+              <div key={index} style={styles.container}>
                 <Base entry={entry} diagnoses={diagnoses} />
                 Employer: {entry.employerName} <br />
-                Sick leave start date: {entry.sickLeave?.startDate} <br />
-                Sick leave end date: {entry.sickLeave?.endDate}
+                {entry.sickLeave?.startDate ? (
+                  <>Sick leave start date: {entry.sickLeave?.startDate} </>
+                ) : null}
+                <br />
+                {entry.sickLeave?.endDate ? (
+                  <>Sick leave end date: {entry.sickLeave?.endDate} </>
+                ) : null}
               </div>
             );
           default:
@@ -81,6 +96,23 @@ const EntryDetail = ({ entries }: { entries: Entry[] }) => {
       })}
     </>
   );
+};
+
+const styles: { container: CSSProperties } = {
+  container: {
+    display: "flex",
+    flexDirection: "column",
+    borderRadius: 5,
+    margin: 10,
+    border: "2px solid lightblue",
+  },
+};
+
+const healthCheckColors = {
+  0: "green",
+  1: "yellow",
+  2: "red",
+  3: "black",
 };
 
 export default EntryDetail;

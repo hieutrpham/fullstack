@@ -24,7 +24,7 @@ router.post(
   newPatientParser,
   (req: Request<unknown, unknown, Patient>, res: Response<Patient>) => {
     patients.concat({ ...req.body, id: v1() });
-    res.send({ ...req.body });
+    res.send({ ...req.body, id: v1() });
   }
 );
 

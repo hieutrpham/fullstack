@@ -6,18 +6,20 @@ export enum Gender {
   Other = "other",
 }
 
-export const Diagnosis = z.object({
+const ZDiagnosis = z.object({
   code: z.string(),
   name: z.string(),
   latin: z.string().optional(),
 });
+
+export type Diagnosis = z.infer<typeof ZDiagnosis>;
 
 const BaseEntry = z.object({
   id: z.string(),
   description: z.string(),
   date: z.string().date(),
   specialist: z.string(),
-  diagnosisCodes: z.array(Diagnosis.shape.code).optional(),
+  diagnosisCodes: z.array(ZDiagnosis.shape.code).optional(),
 });
 
 export enum HealthCheckRating {
