@@ -14,7 +14,7 @@ const ZDiagnosis = z.object({
 
 export type Diagnosis = z.infer<typeof ZDiagnosis>;
 
-const BaseEntry = z.object({
+export const BaseEntry = z.object({
   id: z.string(),
   description: z.string(),
   date: z.string().date(),

@@ -14,10 +14,12 @@
     "@emotion/styled": "^11.11.0",
     "@mui/icons-material": "^5.14.12",
     "@mui/material": "^5.14.12",
+    "@tanstack/react-form": "^0.41.3",
     "axios": "^1.5.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-router-dom": "^6.16.0"
+    "react-router-dom": "^6.16.0",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",

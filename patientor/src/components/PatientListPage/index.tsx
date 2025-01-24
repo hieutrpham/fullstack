@@ -11,7 +11,7 @@ import {
 } from "@mui/material";
 import axios from "axios";
 
-import { PatientFormValues, Patient } from "../../types";
+import { Patient } from "../../types";
 import AddPatientModal from "../AddPatientModal";
 
 import HealthRatingBar from "../HealthRatingBar";
@@ -36,7 +36,7 @@ const PatientListPage = ({ patients, setPatients }: Props) => {
     setError(undefined);
   };
 
-  const submitNewPatient = async (values: PatientFormValues) => {
+  const submitNewPatient = async (values: Patient) => {
     try {
       const patient = await patientService.create(values);
       setPatients(patients.concat(patient));

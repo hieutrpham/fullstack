@@ -1,8 +1,10 @@
-import { useEffect, useState, CSSProperties } from "react";
+import { useEffect, useState, CSSProperties, ReactNode } from "react";
 import { Entry, BaseEntry, Diagnosis } from "../types";
 import patientService from "../services/patients";
-import EventSharpIcon from "@mui/icons-material/EventSharp";
 import FavoriteSharpIcon from "@mui/icons-material/FavoriteSharp";
+import WorkOutlineTwoToneIcon from "@mui/icons-material/WorkOutlineTwoTone";
+import HealthAndSafetyTwoToneIcon from "@mui/icons-material/HealthAndSafetyTwoTone";
+import VaccinesTwoToneIcon from "@mui/icons-material/VaccinesTwoTone";
 
 const assertNever = (value: never): never => {
   throw new Error(
@@ -13,14 +15,16 @@ const assertNever = (value: never): never => {
 const Base = ({
   entry,
   diagnoses,
+  children,
 }: {
   entry: BaseEntry;
   diagnoses: Diagnosis[];
+  children: ReactNode;
 }) => {
   return (
     <>
       <em>
-        <EventSharpIcon style={{ marginTop: 10 }} /> {entry.date}
+        {entry.date} {children}
       </em>
       Description: {entry.description} <br />
       Specialist: {entry.specialist} <br />
@@ -60,7 +64,10 @@ const EntryDetail = ({ entries }: { entries: Entry[] }) => {
           case "HealthCheck":
             return (
               <div key={index} style={styles.container}>
-                <Base entry={entry} diagnoses={diagnoses} /> <br />
+                <Base entry={entry} diagnoses={diagnoses}>
+                  <HealthAndSafetyTwoToneIcon style={{ marginTop: 10 }} />
+                </Base>
+                <br />
                 <FavoriteSharpIcon
                   style={{
                     color: healthCheckColors[entry.healthCheckRating] || "red",
@@ -71,7 +78,9 @@ const EntryDetail = ({ entries }: { entries: Entry[] }) => {
           case "Hospital":
             return (
               <div key={index} style={styles.container}>
-                <Base entry={entry} diagnoses={diagnoses} />
+                <Base entry={entry} diagnoses={diagnoses}>
+                  <VaccinesTwoToneIcon style={{ marginTop: 10 }} />
+                </Base>
                 Discharge date: {entry.discharge.date} <br />
                 Discharge criteria: {entry.discharge.criteria}
               </div>
@@ -79,8 +88,12 @@ const EntryDetail = ({ entries }: { entries: Entry[] }) => {
           case "OccupationalHealthcare":
             return (
               <div key={index} style={styles.container}>
-                <Base entry={entry} diagnoses={diagnoses} />
-                Employer: {entry.employerName} <br />
+                <Base entry={entry} diagnoses={diagnoses}>
+                  <WorkOutlineTwoToneIcon
+                    style={{ marginTop: 10, padding: 2 }}
+                  />
+                  {entry.employerName}
+                </Base>
                 {entry.sickLeave?.startDate ? (
                   <>Sick leave start date: {entry.sickLeave?.startDate} </>
                 ) : null}

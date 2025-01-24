@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Diagnosis, Patient, PatientFormValues } from "../types";
+import { Diagnosis, Patient, NoIdEntry } from "../types";
 
 import { apiBaseUrl } from "../constants";
 
@@ -14,7 +14,7 @@ const getOne = async (id: string) => {
   return data;
 };
 
-const create = async (object: PatientFormValues) => {
+const create = async (object: Patient) => {
   const { data } = await axios.post<Patient>(`${apiBaseUrl}/patients`, object);
 
   return data;
@@ -25,9 +25,18 @@ const getDiagnoses = async () => {
   return data;
 };
 
+const createEntry = async (id: string, object: Zod.infer<typeof NoIdEntry>) => {
+  const { data } = await axios.post<Zod.infer<typeof NoIdEntry>>(
+    `${apiBaseUrl}/patients/${id}/entries`,
+    object
+  );
+  return data;
+};
+
 export default {
   getAll,
   create,
   getOne,
   getDiagnoses,
+  createEntry,
 };
