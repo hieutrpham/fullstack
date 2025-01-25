@@ -1,6 +1,5 @@
-import { useEffect, useState, CSSProperties, ReactNode } from "react";
+import { CSSProperties, ReactNode } from "react";
 import { Entry, BaseEntry, Diagnosis } from "../types";
-import patientService from "../services/patients";
 import FavoriteSharpIcon from "@mui/icons-material/FavoriteSharp";
 import WorkOutlineTwoToneIcon from "@mui/icons-material/WorkOutlineTwoTone";
 import HealthAndSafetyTwoToneIcon from "@mui/icons-material/HealthAndSafetyTwoTone";
@@ -45,18 +44,13 @@ const Base = ({
   );
 };
 
-const EntryDetail = ({ entries }: { entries: Entry[] }) => {
-  const [diagnoses, setDiagnoses] = useState<Diagnosis[]>([]);
-
-  useEffect(() => {
-    const getData = async () => {
-      const diagnoses = await patientService.getDiagnoses();
-      setDiagnoses(diagnoses);
-    };
-
-    getData();
-  }, []);
-
+const EntryDetail = ({
+  entries,
+  diagnoses,
+}: {
+  entries: Entry[];
+  diagnoses: Diagnosis[];
+}) => {
   return (
     <>
       {entries.map((entry, index) => {

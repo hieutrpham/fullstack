@@ -29,7 +29,7 @@ router.post(
 );
 
 router.post("/:id/entries", newEntryParser, (req, res) => {
-  console.log(req.params.id);
+  console.log(req.body);
   const patient = patients.find((p) => p.id === req.params.id);
   patient?.entries.concat({ ...req.body });
   res.send({ ...req.body });

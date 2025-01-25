@@ -23,7 +23,6 @@ export const newEntryParser = (
 ) => {
   try {
     req.body = parseNewEntry(req.body);
-    console.log(req.body);
     next();
   } catch (error: unknown) {
     next(error);

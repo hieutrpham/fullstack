@@ -1,24 +1,27 @@
 import { useForm, formOptions, FieldApi } from "@tanstack/react-form";
-import { Button, TextField } from "@mui/material";
+import { Button, MenuItem, Select, TextField } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
-import { CSSProperties, ReactNode } from "react";
+import { CSSProperties, ReactNode, useState } from "react";
 import patientService from "../services/patients";
 import { useParams } from "react-router-dom";
-import { NoIdEntry } from "../types";
+import { Diagnosis, NoIdEntry } from "../types";
 import { z } from "zod";
 
 const SingleField = ({
   label,
+  type,
   field,
 }: {
   label: string;
+  type: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   field: FieldApi<z.infer<typeof NoIdEntry>, any>;
 }) => (
   <>
-    <label>{label}</label>
     <TextField
+      label={label}
       style={styles.text}
+      type={type}
       variant="standard"
       name={field.name}
       value={field.state.value}
@@ -49,34 +52,72 @@ const styles: {
   },
 };
 
+const defaultValuesByType = {
+  HealthCheck: {
+    type: "HealthCheck",
+    description: "",
+    date: "",
+    specialist: "",
+    diagnosisCodes: [""],
+    healthCheckRating: 0,
+  },
+  OccupationalHealthcare: {
+    type: "OccupationalHealthcare",
+    description: "",
+    date: "",
+    specialist: "",
+    diagnosisCodes: [""],
+    employerName: "",
+    sickLeave: {
+      startDate: "",
+      endDate: "",
+    },
+  },
+  Hospital: {
+    type: "Hospital",
+    description: "",
+    date: "",
+    specialist: "",
+    diagnosisCodes: [""],
+    discharge: {
+      date: "",
+      criteria: "",
+    },
+  },
+};
+
 const NewEntry = ({
   show,
+  diagnoses,
   children,
 }: {
   show: boolean;
+  diagnoses: Diagnosis[];
   children: ReactNode;
 }) => {
   const { id } = useParams();
+  const [selectedType, setSelectedType] =
+    useState<keyof typeof defaultValuesByType>("HealthCheck");
+
+  const [diagnosesCode, setDiagnosesCode] = useState<string[]>([]);
 
   const patientId = id ? id : "";
 
   const formOpts = formOptions<z.infer<typeof NoIdEntry>>({
-    defaultValues: {
-      type: "HealthCheck",
-      description: "",
-      date: "",
-      specialist: "",
-      diagnosisCodes: [],
-      healthCheckRating: 0,
-    },
+    defaultValues: defaultValuesByType[selectedType] as z.infer<
+      typeof NoIdEntry
+    >,
   });
 
   const tsform = useForm({
     ...formOpts,
+
     onSubmit: async ({ value }) => {
       console.log(value);
-      const data = await patientService.createEntry(patientId, { ...value });
-      console.log(data);
+      await patientService.createEntry(patientId, {
+        ...value,
+        diagnosisCodes: diagnosesCode,
+      });
     },
 
     validators: {
@@ -87,6 +128,18 @@ const NewEntry = ({
   if (show) {
     return (
       <>
+        <Select
+          value={selectedType}
+          onChange={(e) =>
+            setSelectedType(e.target.value as keyof typeof defaultValuesByType)
+          }
+        >
+          <MenuItem value="HealthCheck">Health Check</MenuItem>
+          <MenuItem value="OccupationalHealthcare">
+            Occupational Healthcare
+          </MenuItem>
+          <MenuItem value="Hospital">Hospital</MenuItem>
+        </Select>
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -101,7 +154,7 @@ const NewEntry = ({
             children={(field) => {
               return (
                 <>
-                  <SingleField label="Description" field={field} />
+                  <SingleField label="Description" field={field} type="text" />
                   {field.state.meta.errors.length ? (
                     <em>{field.state.meta.errors.join(",")}</em>
                   ) : null}
@@ -114,7 +167,7 @@ const NewEntry = ({
             children={(field) => {
               return (
                 <>
-                  <SingleField label="Date" field={field} />
+                  <SingleField label="" field={field} type="date" />
                   {field.state.meta.errors.length ? (
                     <em>{field.state.meta.errors.join(",")}</em>
                   ) : null}
@@ -127,7 +180,7 @@ const NewEntry = ({
             children={(field) => {
               return (
                 <>
-                  <SingleField label="Specialist" field={field} />
+                  <SingleField label="Specialist" field={field} type="text" />
                   {field.state.meta.errors.length ? (
                     <em>{field.state.meta.errors.join(",")}</em>
                   ) : null}
@@ -140,7 +193,25 @@ const NewEntry = ({
             children={(field) => {
               return (
                 <>
-                  <SingleField label="Code" field={field} />
+                  <Select
+                    label="Codes"
+                    value={diagnosesCode}
+                    multiple
+                    onChange={(e) =>
+                      setDiagnosesCode(
+                        typeof e.target.value === "string"
+                          ? e.target.value.split(",")
+                          : e.target.value
+                      )
+                    }
+                  >
+                    {diagnoses.map((d) => (
+                      <MenuItem key={d.code} value={d.code}>
+                        {d.code}
+                      </MenuItem>
+                    ))}
+                  </Select>
+
                   {field.state.meta.errors.length ? (
                     <em>{field.state.meta.errors.join(",")}</em>
                   ) : null}
@@ -148,6 +219,129 @@ const NewEntry = ({
               );
             }}
           />
+
+          {selectedType === "HealthCheck" && (
+            <tsform.Field
+              name="healthCheckRating"
+              children={(field) => {
+                return (
+                  <>
+                    <SingleField
+                      label="Health Check Rating"
+                      field={field}
+                      type="text"
+                    />
+                    {field.state.meta.errors.length ? (
+                      <em>{field.state.meta.errors.join(",")}</em>
+                    ) : null}
+                  </>
+                );
+              }}
+            />
+          )}
+
+          {selectedType === "Hospital" && (
+            <>
+              <tsform.Field
+                name="discharge.date"
+                children={(field) => {
+                  return (
+                    <>
+                      <TextField
+                        label="Discharge Date"
+                        type="date"
+                        name={field.name}
+                        value={field.state.value}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                      />
+                      {field.state.meta.errors.length ? (
+                        <em>{field.state.meta.errors.join(",")}</em>
+                      ) : null}
+                    </>
+                  );
+                }}
+              />
+              <tsform.Field
+                name="discharge.criteria"
+                children={(field) => {
+                  return (
+                    <>
+                      <TextField
+                        label="Criteria"
+                        type="text"
+                        name={field.name}
+                        value={field.state.value}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                      />
+                      {field.state.meta.errors.length ? (
+                        <em>{field.state.meta.errors.join(",")}</em>
+                      ) : null}
+                    </>
+                  );
+                }}
+              />
+            </>
+          )}
+
+          {selectedType === "OccupationalHealthcare" && (
+            <>
+              <tsform.Field
+                name="employerName"
+                children={(field) => {
+                  return (
+                    <>
+                      <TextField
+                        label="Employer"
+                        type="text"
+                        value={field.state.value}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                      />
+                      {field.state.meta.errors.length ? (
+                        <em>{field.state.meta.errors.join(",")}</em>
+                      ) : null}
+                    </>
+                  );
+                }}
+              />
+              <tsform.Field
+                name="sickLeave.startDate"
+                children={(field) => {
+                  return (
+                    <>
+                      <label>Start date</label>
+                      <TextField
+                        type="date"
+                        value={field.state.value}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                      />
+                      {field.state.meta.errors.length ? (
+                        <em>{field.state.meta.errors.join(",")}</em>
+                      ) : null}
+                    </>
+                  );
+                }}
+              />
+              <tsform.Field
+                name="sickLeave.endDate"
+                children={(field) => {
+                  return (
+                    <>
+                      <label>End date</label>
+                      <TextField
+                        type="date"
+                        value={field.state.value}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                      />
+                      {field.state.meta.errors.length ? (
+                        <em>{field.state.meta.errors.join(",")}</em>
+                      ) : null}
+                    </>
+                  );
+                }}
+              />
+            </>
+          )}
+
           <div
             style={{
               display: "flex",
@@ -163,6 +357,8 @@ const NewEntry = ({
             >
               Submit
             </Button>
+
+            {/*Cancel button here*/}
             {children}
           </div>
         </form>
