@@ -1,11 +1,10 @@
-import { Patient } from "../types";
 import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
 import TransgenderIcon from "@mui/icons-material/Transgender";
 import CakeSharpIcon from "@mui/icons-material/CakeSharp";
 import { useState, useEffect } from "react";
 import { Button } from "@mui/material";
-import { Diagnosis } from "../types";
+import { Diagnosis, Patient, Entry } from "../types";
 import patientService from "../services/patients";
 import CancelIcon from "@mui/icons-material/Cancel";
 import NewEntry from "../components/NewEntry";
@@ -13,6 +12,7 @@ import EntryDetail from "./EntryDetail";
 
 const PatientView = ({ patient }: { patient: Patient }) => {
   const [show, setShow] = useState(false);
+  const [entries, setEntries] = useState<Entry[]>(patient.entries);
   const [diagnoses, setDiagnoses] = useState<Diagnosis[]>([]);
 
   useEffect(() => {
@@ -24,7 +24,16 @@ const PatientView = ({ patient }: { patient: Patient }) => {
     getData();
   }, []);
 
+  useEffect(() => {
+    setEntries(patient.entries); // Sync local state with prop
+  }, [patient.entries]);
+
   const showNewEntry = () => setShow(!show);
+
+  const handleAddEntry = (entry: Entry) => {
+    const newEntries = entries.concat(entry);
+    setEntries(newEntries);
+  };
 
   return (
     <>
@@ -48,7 +57,7 @@ const PatientView = ({ patient }: { patient: Patient }) => {
         </Button>
       ) : null}
 
-      <NewEntry show={show} diagnoses={diagnoses}>
+      <NewEntry show={show} diagnoses={diagnoses} addEntry={handleAddEntry}>
         <Button
           variant="contained"
           endIcon={<CancelIcon />}
@@ -61,10 +70,10 @@ const PatientView = ({ patient }: { patient: Patient }) => {
       </NewEntry>
 
       <section style={{ margin: 10 }}>
-        {patient.entries.length > 0 ? (
+        {entries.length > 0 ? (
           <>
             <strong>Entries:</strong> <br />
-            <EntryDetail diagnoses={diagnoses} entries={patient.entries} />
+            <EntryDetail diagnoses={diagnoses} entries={entries} />
           </>
         ) : null}
       </section>

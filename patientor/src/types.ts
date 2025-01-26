@@ -57,16 +57,13 @@ export const HospitalEntry = ZBaseEntry.extend({
   }),
 });
 
-export type Entry =
-  | z.infer<typeof HealthCheckEntry>
-  | z.infer<typeof OccupationalHealthcareEntry>
-  | z.infer<typeof HospitalEntry>;
-
 export const NoIdEntry = z.discriminatedUnion("type", [
   HealthCheckEntry.omit({ id: true }),
   OccupationalHealthcareEntry.omit({ id: true }),
   HospitalEntry.omit({ id: true }),
 ]);
+
+export type Entry = z.infer<typeof NoIdEntry>;
 
 export type Patient = {
   id: string;

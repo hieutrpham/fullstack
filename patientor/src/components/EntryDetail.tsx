@@ -16,7 +16,7 @@ const Base = ({
   diagnoses,
   children,
 }: {
-  entry: BaseEntry;
+  entry: Omit<BaseEntry, "id">;
   diagnoses: Diagnosis[];
   children: ReactNode;
 }) => {
@@ -53,54 +53,57 @@ const EntryDetail = ({
 }) => {
   return (
     <>
-      {entries.map((entry, index) => {
-        switch (entry.type) {
-          case "HealthCheck":
-            return (
-              <div key={index} style={styles.container}>
-                <Base entry={entry} diagnoses={diagnoses}>
-                  <HealthAndSafetyTwoToneIcon style={{ marginTop: 10 }} />
-                </Base>
-                <br />
-                <FavoriteSharpIcon
-                  style={{
-                    color: healthCheckColors[entry.healthCheckRating] || "red",
-                  }}
-                />
-              </div>
-            );
-          case "Hospital":
-            return (
-              <div key={index} style={styles.container}>
-                <Base entry={entry} diagnoses={diagnoses}>
-                  <VaccinesTwoToneIcon style={{ marginTop: 10 }} />
-                </Base>
-                Discharge date: {entry.discharge.date} <br />
-                Discharge criteria: {entry.discharge.criteria}
-              </div>
-            );
-          case "OccupationalHealthcare":
-            return (
-              <div key={index} style={styles.container}>
-                <Base entry={entry} diagnoses={diagnoses}>
-                  <WorkOutlineTwoToneIcon
-                    style={{ marginTop: 10, padding: 2 }}
-                  />
-                  {entry.employerName}
-                </Base>
-                {entry.sickLeave?.startDate ? (
-                  <>Sick leave start date: {entry.sickLeave?.startDate} </>
-                ) : null}
-                <br />
-                {entry.sickLeave?.endDate ? (
-                  <>Sick leave end date: {entry.sickLeave?.endDate} </>
-                ) : null}
-              </div>
-            );
-          default:
-            return assertNever(entry);
-        }
-      })}
+      {entries
+        ? entries.map((entry, index) => {
+            switch (entry.type) {
+              case "HealthCheck":
+                return (
+                  <div key={index} style={styles.container}>
+                    <Base entry={entry} diagnoses={diagnoses}>
+                      <HealthAndSafetyTwoToneIcon style={{ marginTop: 10 }} />
+                    </Base>
+                    <br />
+                    <FavoriteSharpIcon
+                      style={{
+                        color:
+                          healthCheckColors[entry.healthCheckRating] || "red",
+                      }}
+                    />
+                  </div>
+                );
+              case "Hospital":
+                return (
+                  <div key={index} style={styles.container}>
+                    <Base entry={entry} diagnoses={diagnoses}>
+                      <VaccinesTwoToneIcon style={{ marginTop: 10 }} />
+                    </Base>
+                    Discharge date: {entry.discharge.date} <br />
+                    Discharge criteria: {entry.discharge.criteria}
+                  </div>
+                );
+              case "OccupationalHealthcare":
+                return (
+                  <div key={index} style={styles.container}>
+                    <Base entry={entry} diagnoses={diagnoses}>
+                      <WorkOutlineTwoToneIcon
+                        style={{ marginTop: 10, padding: 2 }}
+                      />
+                      {entry.employerName}
+                    </Base>
+                    {entry.sickLeave?.startDate ? (
+                      <>Sick leave start date: {entry.sickLeave?.startDate} </>
+                    ) : null}
+                    <br />
+                    {entry.sickLeave?.endDate ? (
+                      <>Sick leave end date: {entry.sickLeave?.endDate} </>
+                    ) : null}
+                  </div>
+                );
+              default:
+                return assertNever(entry);
+            }
+          })
+        : null}
     </>
   );
 };

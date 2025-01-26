@@ -4,7 +4,7 @@ import SendIcon from "@mui/icons-material/Send";
 import { CSSProperties, ReactNode, useState } from "react";
 import patientService from "../services/patients";
 import { useParams } from "react-router-dom";
-import { Diagnosis, NoIdEntry } from "../types";
+import { Diagnosis, Entry, NoIdEntry } from "../types";
 import { z } from "zod";
 
 const SingleField = ({
@@ -89,10 +89,12 @@ const defaultValuesByType = {
 const NewEntry = ({
   show,
   diagnoses,
+  addEntry,
   children,
 }: {
   show: boolean;
   diagnoses: Diagnosis[];
+  addEntry: (entry: Entry) => void;
   children: ReactNode;
 }) => {
   const { id } = useParams();
@@ -113,11 +115,15 @@ const NewEntry = ({
     ...formOpts,
 
     onSubmit: async ({ value }) => {
-      console.log(value);
       await patientService.createEntry(patientId, {
         ...value,
         diagnosisCodes: diagnosesCode,
       });
+      addEntry({
+        ...value,
+        diagnosisCodes: diagnosesCode,
+      });
+      console.log("entry added");
     },
 
     validators: {
