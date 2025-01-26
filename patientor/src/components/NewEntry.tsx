@@ -128,18 +128,6 @@ const NewEntry = ({
   if (show) {
     return (
       <>
-        <Select
-          value={selectedType}
-          onChange={(e) =>
-            setSelectedType(e.target.value as keyof typeof defaultValuesByType)
-          }
-        >
-          <MenuItem value="HealthCheck">Health Check</MenuItem>
-          <MenuItem value="OccupationalHealthcare">
-            Occupational Healthcare
-          </MenuItem>
-          <MenuItem value="Hospital">Hospital</MenuItem>
-        </Select>
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -149,6 +137,32 @@ const NewEntry = ({
           }}
           style={styles.formContainer}
         >
+          <tsform.Field
+            name="type"
+            children={(field) => {
+              return (
+                <>
+                  <Select
+                    value={field.state.value}
+                    onChange={(e) => {
+                      field.handleChange(
+                        e.target.value as keyof typeof defaultValuesByType
+                      );
+                      setSelectedType(
+                        e.target.value as keyof typeof defaultValuesByType
+                      );
+                    }}
+                  >
+                    <MenuItem value="HealthCheck">Health Check</MenuItem>
+                    <MenuItem value="OccupationalHealthcare">
+                      Occupational Healthcare
+                    </MenuItem>
+                    <MenuItem value="Hospital">Hospital</MenuItem>
+                  </Select>
+                </>
+              );
+            }}
+          />
           <tsform.Field
             name="description"
             children={(field) => {
@@ -162,6 +176,7 @@ const NewEntry = ({
               );
             }}
           />
+
           <tsform.Field
             name="date"
             children={(field) => {
@@ -226,10 +241,16 @@ const NewEntry = ({
               children={(field) => {
                 return (
                   <>
-                    <SingleField
-                      label="Health Check Rating"
-                      field={field}
-                      type="text"
+                    <TextField
+                      label="Rating"
+                      style={styles.text}
+                      type="number"
+                      variant="standard"
+                      name={field.name}
+                      value={field.state.value}
+                      onChange={(e) =>
+                        field.handleChange(Number(e.target.value))
+                      }
                     />
                     {field.state.meta.errors.length ? (
                       <em>{field.state.meta.errors.join(",")}</em>
@@ -251,7 +272,7 @@ const NewEntry = ({
                         label="Discharge Date"
                         type="date"
                         name={field.name}
-                        value={field.state.value}
+                        value={field.state.value || ""}
                         onChange={(e) => field.handleChange(e.target.value)}
                       />
                       {field.state.meta.errors.length ? (
@@ -270,7 +291,7 @@ const NewEntry = ({
                         label="Criteria"
                         type="text"
                         name={field.name}
-                        value={field.state.value}
+                        value={field.state.value || ""}
                         onChange={(e) => field.handleChange(e.target.value)}
                       />
                       {field.state.meta.errors.length ? (
@@ -293,7 +314,7 @@ const NewEntry = ({
                       <TextField
                         label="Employer"
                         type="text"
-                        value={field.state.value}
+                        value={field.state.value || ""}
                         onChange={(e) => field.handleChange(e.target.value)}
                       />
                       {field.state.meta.errors.length ? (
@@ -311,7 +332,7 @@ const NewEntry = ({
                       <label>Start date</label>
                       <TextField
                         type="date"
-                        value={field.state.value}
+                        value={field.state.value || ""}
                         onChange={(e) => field.handleChange(e.target.value)}
                       />
                       {field.state.meta.errors.length ? (
@@ -329,7 +350,7 @@ const NewEntry = ({
                       <label>End date</label>
                       <TextField
                         type="date"
-                        value={field.state.value}
+                        value={field.state.value || ""}
                         onChange={(e) => field.handleChange(e.target.value)}
                       />
                       {field.state.meta.errors.length ? (
