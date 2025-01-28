@@ -27,17 +27,14 @@ const App = () => {
         </Button>
         {matchedCountries.length > 10 ? (
           <>too many matches</>
-        ) : matchedCountries.length > 1 ? (
+        ) : matchedCountries.length >= 1 ? (
           <ul>
             {matchedCountries.map((c, index) => (
-              <li key={index}>{c}</li>
+              <li key={index}>{<Country name={c} />}</li>
             ))}
           </ul>
         ) : null}
       </form>
-      {matchedCountries.length === 1 ? (
-        <Country name={matchedCountries} />
-      ) : null}
     </Flex>
   );
 };
