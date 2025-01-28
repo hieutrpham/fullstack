@@ -1,23 +1,17 @@
 import axios from "axios";
 
-export const getAllCountries = async () => {
-  let data = [];
-  await axios
-    .get("https://studies.cs.helsinki.fi/restcountries/api/all")
-    .then((res) => {
-      const c = res.data.map((d) => d.name.common);
-      data = data.concat(c);
-    });
+const baseUrl = "http://api.weatherapi.com/v1";
 
-  return data;
+const apiKey = import.meta.env.VITE_API_KEY;
+
+export const getWeather = async (lat, lon) => {
+  try {
+    const w = await axios.get(
+      `${baseUrl}/current.json?key=${apiKey}&q=${lat},${lon}`
+    );
+
+    return w.data;
+  } catch (error) {
+    console.log(error);
+  }
 };
-
-// const data = getAllCountries();
-// console.log(data);
-
-// axios
-//   .get("https://studies.cs.helsinki.fi/restcountries/api/all")
-//   .then((res) => {
-//     const data = res.data.map((d) => d.name.common);
-//     console.log(data);
-//   });

@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
+import Weather from "./Weather";
 
 const Country = ({ name }) => {
   const [country, setCountry] = useState("");
@@ -55,6 +56,12 @@ const Country = ({ name }) => {
             height="100"
             alt={`flag of ${country.name.common}`}
           />
+          {country.capitalInfo.latlng ? (
+            <Weather
+              lat={country.capitalInfo.latlng[0]}
+              lon={country.capitalInfo.latlng[1]}
+            />
+          ) : null}
         </div>
       </div>
     );

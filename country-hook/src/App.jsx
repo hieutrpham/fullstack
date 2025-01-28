@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Flex, Button } from "@radix-ui/themes";
 import { useCountries } from "./hooks";
 import Country from "./Country";
+import Weather from "./Weather";
 
 const App = () => {
   const [name, setName] = useState("");
@@ -19,7 +20,7 @@ const App = () => {
   };
 
   return (
-    <Flex direction="column" align="center">
+    <Flex direction="row" align="center">
       <form onSubmit={findCountries}>
         <input value={name} onChange={handleChange} />
         <Button type="submit" style={{ marginLeft: 10 }}>
@@ -28,11 +29,11 @@ const App = () => {
         {matchedCountries.length > 10 ? (
           <>too many matches</>
         ) : matchedCountries.length >= 1 ? (
-          <ul>
+          <Flex wrap="wrap">
             {matchedCountries.map((c, index) => (
-              <li key={index}>{<Country name={c} />}</li>
+              <div key={index}>{<Country name={c} />}</div>
             ))}
-          </ul>
+          </Flex>
         ) : null}
       </form>
     </Flex>

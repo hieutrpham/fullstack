@@ -6,16 +6,16 @@ import App from "./App";
 import { StrictMode } from "react";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <Theme
-    accentColor="sky"
-    grayColor="sand"
-    panelBackground="solid"
-    radius="large"
-    scaling="110%"
-    appearance="dark"
-  >
-    <StrictMode>
+  <StrictMode>
+    <Theme
+      accentColor="sky"
+      grayColor="sand"
+      panelBackground="solid"
+      radius="large"
+      scaling="110%"
+      appearance="dark"
+    >
       <App />
-    </StrictMode>
-  </Theme>
+    </Theme>
+  </StrictMode>
 );
